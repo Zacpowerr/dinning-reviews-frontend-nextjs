@@ -1,10 +1,7 @@
 import { Restaurant } from "@/types/Restaurant";
-import { Review } from "@/types/Review";
+import { backendServiceUrl, serverUrl } from "./configUtils";
 
-const serverUrl: string = process.env.API_URL ?? "";
-const backendServiceUrl: string = process.env.NEXT_PUBLIC_API_URL ?? "";
-
-export async function getRestaurants() {
+export async function getRestaurants(): Promise<Restaurant[]> {
   try {
     const restaurantApiResponse = await fetch(`${serverUrl}/restaurants`);
     if (!restaurantApiResponse.ok) return [];
@@ -12,12 +9,11 @@ export async function getRestaurants() {
     return restaurants;
   } catch (e) {
     console.error(e);
-    // Return empty array if fetch fails (e.g., during build)
     return [];
   }
 }
 
-export async function getRestaurantById(id: number) {
+export async function getRestaurantById(id: number): Promise<Restaurant> {
   try {
     const restaurantApiResponse = await fetch(`${serverUrl}/restaurants/${id}`);
     if (!restaurantApiResponse.ok) return null as unknown as Restaurant;
@@ -25,19 +21,18 @@ export async function getRestaurantById(id: number) {
     return restaurant;
   } catch (e) {
     console.error(e);
-    // Return empty array if fetch fails (e.g., during build)
     return null as unknown as Restaurant;
   }
 }
 
 export async function createRestaurant(
-  restaurant: Partial<Restaurant>
+  restaurantToCreate: Partial<Restaurant>
 ): Promise<Restaurant> {
   const restaurantApiResponse = await fetch(
     `${backendServiceUrl}/restaurants`,
     {
       method: "POST",
-      body: JSON.stringify(restaurant),
+      body: JSON.stringify(restaurantToCreate),
       headers: {
         "Content-Type": "application/json",
       },
@@ -47,17 +42,67 @@ export async function createRestaurant(
   if (!restaurantApiResponse.ok) {
     throw new Error(restaurantApiResponse.statusText);
   }
-  const newRestaurant = (await restaurantApiResponse.json()) as Restaurant;
-  return newRestaurant;
+  const restaurant = (await restaurantApiResponse.json()) as Restaurant;
+  return restaurant;
 }
-export async function getRestaurantReviews(id: number): Promise<Review[]> {
+
+export async function updateRestaurant(
+  restaurantToUpdate: Partial<Restaurant>
+): Promise<Restaurant> {
+  const restaurantApiResponse = await fetch(
+    `${backendServiceUrl}/restaurants/${restaurantToUpdate.id}`,
+    {
+      method: "PUT",
+      body: JSON.stringify(restaurantToUpdate),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+
+  if (!restaurantApiResponse.ok) {
+    throw new Error(restaurantApiResponse.statusText);
+  }
+  const restaurant = (await restaurantApiResponse.json()) as Restaurant;
+  return restaurant;
+}
+
+export async function deleteRestaurant(id: number): Promise<Restaurant> {
+  const restaurantApiResponse = await fetch(
+    `${backendServiceUrl}/restaurants/${id}`,
+    {
+      method: "DELETE",
+    }
+  );
+
+  if (!restaurantApiResponse.ok) {
+    throw new Error(restaurantApiResponse.statusText);
+  }
+  const restaurant = (await restaurantApiResponse.json()) as Restaurant;
+  return restaurant;
+}
+
+export async function searchRestaurant(
+  searchTerms: string[],
+  searchValues: string[]
+): Promise<Restaurant[]> {
+  let apiUrl = backendServiceUrl + "/restaurants/search";
+  for (let i = 0; i < searchTerms.length; i++) {
+    if (i == 0) {
+      apiUrl = apiUrl.concat("?");
+    }
+    apiUrl = apiUrl.concat(searchTerms[i] + "=" + searchValues[i]);
+    if (i !== searchTerms.length - 1) {
+      apiUrl = apiUrl.concat("&");
+    }
+  }
   try {
-    const reviewsApiResponse = await fetch(
-      `${serverUrl}/restaurants/${id}/reviews`
-    );
-    if (!reviewsApiResponse.ok) return [];
-    const reviews = (await reviewsApiResponse.json()) as Review[];
-    return reviews;
+    const restaurantApiResponse = await fetch(apiUrl);
+    if (!restaurantApiResponse.ok) {
+      throw new Error(restaurantApiResponse.statusText);
+    }
+    const restaurants = (await restaurantApiResponse.json()) as Restaurant[];
+    return restaurants;
   } catch (e) {
     console.error(e);
     return [];
