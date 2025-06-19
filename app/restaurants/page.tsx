@@ -18,12 +18,14 @@ export default async function RestaurantsPage() {
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-      <div id="error-popover">defaulterror</div>
-      <main>
-        <Link href={"restaurants/new"}>
-          <button>New Restaurant</button>
-        </Link>
+      <main className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex flex-col items-center justify-center">
+        {/* <div id="error-popover"></div> */}
         <RestaurantList restaurants={restaurants} />
+        <Link href={"restaurants/new"}>
+          <button className="w-full text-white font-bold bg-green-500 hover:bg-green-900 cursor-pointer p-2 rounded">
+            New Restaurant
+          </button>
+        </Link>
       </main>
     </>
   );
