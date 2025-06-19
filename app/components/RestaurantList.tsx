@@ -7,7 +7,7 @@ type RestaurantListProps = {
 };
 
 const RestaurantList: React.FC<RestaurantListProps> = ({ restaurants }) => (
-  <main className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex flex-col items-center justify-center">
+  <>
     <header className="mb-10 text-center">
       <h1 className="text-5xl font-extrabold text-indigo-700 mb-4">
         Restaurants
@@ -23,7 +23,7 @@ const RestaurantList: React.FC<RestaurantListProps> = ({ restaurants }) => (
         </li>
       ))}
     </ul>
-  </main>
+  </>
 );
 
 export default RestaurantList;

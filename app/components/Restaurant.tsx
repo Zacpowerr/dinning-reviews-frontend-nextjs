@@ -1,5 +1,4 @@
 import { Restaurant } from "@/types/Restaurant";
-import Link from "next/link";
 import React from "react";
 
 type RestaurantListProps = {
@@ -7,22 +6,26 @@ type RestaurantListProps = {
 };
 
 const RestaurantComponent: React.FC<RestaurantListProps> = ({ restaurant }) => (
-  <main className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex flex-col items-center justify-center">
-    <header className="mb-10 text-center">
-      <h1 className="text-5xl font-extrabold text-indigo-700 mb-4">
+  <>
+    <div className="mb-10 mx-auto">
+      <h1 className="text-5xl font-extrabold text-indigo-700">
         {restaurant.name}
       </h1>
-    </header>
-    <div>{restaurant.eggScore}</div>
-    <div>{restaurant.dairyScore}</div>
-    <div>{restaurant.peanutScore}</div>
-    <div>{restaurant.overallScore}</div>
-    <Link href={"/restaurants/${restaurant.id}/reviews"}>
-      <button className="w-full py-2 bg-blue-500 hover:bg-blue-700">
-        View Reviews
-      </button>
-    </Link>
-  </main>
+    </div>
+    <h2 className="text-indigo-700 font-extrabold mb-2">Overview:</h2>
+    <p className="text-indigo-700 font-bold pl-2">
+      Egg Score: {restaurant.eggScore}
+    </p>
+    <p className="text-indigo-700 font-bold pl-2">
+      Dairy Score: {restaurant.dairyScore}
+    </p>
+    <p className="text-indigo-700 font-bold pl-2">
+      Peanut Score: {restaurant.peanutScore}
+    </p>
+    <p className="text-indigo-700 font-bold pl-2">
+      Overall Score: {restaurant.overallScore}
+    </p>
+  </>
 );
 
 export default RestaurantComponent;
