@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useContext, useState } from "react";
 import { User } from "../../../types/User";
 import { createUser } from "../../lib/userUtils";

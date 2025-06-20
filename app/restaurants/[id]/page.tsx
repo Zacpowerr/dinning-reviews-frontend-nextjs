@@ -5,6 +5,7 @@ import ReviewListComponent from "../../../app/components/review/ReviewList";
 import NotFound from "../../../app/not-found";
 import { Metadata } from "next";
 import { getReviewsByRestaurantId } from "../../lib/reviewUtils";
+import Link from "next/link";
 
 export const dynamic = "force-dynamic";
 
@@ -27,7 +28,17 @@ export default async function RestaurantPage({
   return (
     <main className="container">
       {restaurant && <RestaurantComponent restaurant={restaurant} />}
-      {restaurant && <ReviewListComponent reviews={reviews} />}
+      <Link href={`/restaurants/${restaurant.id}/reviews/new`}>
+        <button type="button" className="submit-btn">
+          Create Review
+        </button>
+      </Link>
+      {restaurant && (
+        <>
+          <h2 className="text-indigo-700 font-extrabold mb-2">Reviews:</h2>
+          <ReviewListComponent reviews={reviews} />
+        </>
+      )}
       <BackButton target={"/restaurants"} />
     </main>
   );

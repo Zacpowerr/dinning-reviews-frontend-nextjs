@@ -28,6 +28,7 @@ export default async function RestaurantPage({
   return (
     <main className="container">
       <UserComponent user={user} />
+      <h2 className="text-indigo-700 font-extrabold mb-2">Reviews:</h2>
       <ReviewListComponent reviews={reviews} />
       <BackButton target={"/users"} />
     </main>

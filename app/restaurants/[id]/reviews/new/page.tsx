@@ -13,10 +13,7 @@ export default function NewReviewPage() {
         <title>Create Review | Dinning Reviews</title>
       </Head>
       <main className="container">
-        <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded shadow">
-          <h1 className="">Add New Review</h1>
-          <ReviewForm />
-        </div>
+        <ReviewForm />
         <BackButton target={`/restaurants/${params.id}`} />
       </main>
     </>

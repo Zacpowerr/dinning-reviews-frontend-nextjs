@@ -129,7 +129,21 @@ export async function getPendingReviews(): Promise<Review[]> {
     const reviews = (await reviewApiResponse.json()) as Review[];
     return reviews;
   } catch (e) {
-    console.log(e);
+    console.error(e);
+    return [];
+  }
+}
+export async function getAllReviews(): Promise<Review[]> {
+  try {
+    const reviewsApiResponse = await fetch(`${backendServiceUrl}/reviews`);
+    if (!reviewsApiResponse.ok) {
+      const errorMessage = await reviewsApiResponse.json();
+      throw new Error(errorMessage.message);
+    }
+    const reviews = (await reviewsApiResponse.json()) as Review[];
+    return reviews;
+  } catch (e) {
+    console.error(e);
     return [];
   }
 }

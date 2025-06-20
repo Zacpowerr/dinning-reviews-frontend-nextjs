@@ -1,7 +1,7 @@
 import { getAllUsers } from "../lib/userUtils";
 import UserList from "../components/user/UserList";
-import UserForm from "../components/user/UserForm";
 import { Metadata } from "next";
+import Link from "next/link";
 
 export const dynamic = "force-dynamic";
 
@@ -16,7 +16,11 @@ export default async function UsersPage() {
   return (
     <main className="container">
       <UserList users={users} />
-      <UserForm />
+      <Link href="/users/new">
+        <button type="button" className="submit-btn">
+          Create User
+        </button>
+      </Link>
     </main>
   );
 }

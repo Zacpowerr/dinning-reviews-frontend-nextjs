@@ -13,13 +13,11 @@ const UserList: React.FC<UserListProps> = ({ users }) => (
     </header>
     <ul>
       {users.map((user) => (
-        <li key={user.userName} className="">
-          <li
-            key={user.userName}
-            className="mb-2 text-lg font-medium text-indigo-900"
-          >
-            <Link href={`users/${user.userName}`}>{user.userName}</Link>
-          </li>
+        <li
+          key={user.userName}
+          className="mb-2 text-lg font-medium text-indigo-900"
+        >
+          <Link href={`users/${user.userName}`}>{user.userName}</Link>
         </li>
       ))}
     </ul>
