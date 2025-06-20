@@ -1,10 +1,13 @@
-import { Restaurant } from "@/types/Restaurant";
+import { Restaurant } from "../../types/Restaurant";
 import { backendServiceUrl, serverUrl } from "./configUtils";
 
 export async function getRestaurants(): Promise<Restaurant[]> {
   try {
     const restaurantApiResponse = await fetch(`${serverUrl}/restaurants`);
-    if (!restaurantApiResponse.ok) return [];
+    if (!restaurantApiResponse.ok) {
+      const errorMessage = await restaurantApiResponse.json();
+      throw new Error(errorMessage.message);
+    }
     const restaurants = (await restaurantApiResponse.json()) as Restaurant[];
     return restaurants;
   } catch (e) {
@@ -16,7 +19,10 @@ export async function getRestaurants(): Promise<Restaurant[]> {
 export async function getRestaurantById(id: number): Promise<Restaurant> {
   try {
     const restaurantApiResponse = await fetch(`${serverUrl}/restaurants/${id}`);
-    if (!restaurantApiResponse.ok) return null as unknown as Restaurant;
+    if (!restaurantApiResponse.ok) {
+      const errorMessage = await restaurantApiResponse.json();
+      throw new Error(errorMessage.message);
+    }
     const restaurant = (await restaurantApiResponse.json()) as Restaurant;
     return restaurant;
   } catch (e) {
@@ -40,7 +46,8 @@ export async function createRestaurant(
   );
 
   if (!restaurantApiResponse.ok) {
-    throw new Error(restaurantApiResponse.statusText);
+    const errorMessage = await restaurantApiResponse.json();
+    throw new Error(errorMessage.message);
   }
   const restaurant = (await restaurantApiResponse.json()) as Restaurant;
   return restaurant;
@@ -61,7 +68,8 @@ export async function updateRestaurant(
   );
 
   if (!restaurantApiResponse.ok) {
-    throw new Error(restaurantApiResponse.statusText);
+    const errorMessage = await restaurantApiResponse.json();
+    throw new Error(errorMessage.message);
   }
   const restaurant = (await restaurantApiResponse.json()) as Restaurant;
   return restaurant;
@@ -76,7 +84,8 @@ export async function deleteRestaurant(id: number): Promise<Restaurant> {
   );
 
   if (!restaurantApiResponse.ok) {
-    throw new Error(restaurantApiResponse.statusText);
+    const errorMessage = await restaurantApiResponse.json();
+    throw new Error(errorMessage.message);
   }
   const restaurant = (await restaurantApiResponse.json()) as Restaurant;
   return restaurant;
@@ -96,15 +105,11 @@ export async function searchRestaurant(
       apiUrl = apiUrl.concat("&");
     }
   }
-  try {
-    const restaurantApiResponse = await fetch(apiUrl);
-    if (!restaurantApiResponse.ok) {
-      throw new Error(restaurantApiResponse.statusText);
-    }
-    const restaurants = (await restaurantApiResponse.json()) as Restaurant[];
-    return restaurants;
-  } catch (e) {
-    console.error(e);
-    return [];
+  const restaurantApiResponse = await fetch(apiUrl);
+  if (!restaurantApiResponse.ok) {
+    const errorMessage = await restaurantApiResponse.json();
+    throw new Error(errorMessage.message);
   }
+  const restaurants = (await restaurantApiResponse.json()) as Restaurant[];
+  return restaurants;
 }

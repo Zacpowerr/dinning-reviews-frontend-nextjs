@@ -1,5 +1,5 @@
-import { Restaurant } from "@/types/Restaurant";
 import React from "react";
+import { Restaurant } from "../../../types/Restaurant";
 
 type RestaurantListProps = {
   restaurant: Restaurant;
@@ -8,11 +8,9 @@ type RestaurantListProps = {
 const RestaurantComponent: React.FC<RestaurantListProps> = ({ restaurant }) => (
   <>
     <div className="mb-10 mx-auto">
-      <h1 className="text-5xl font-extrabold text-indigo-700">
-        {restaurant.name}
-      </h1>
+      <h1 className="">{restaurant.name}</h1>
     </div>
-    <h2 className="text-indigo-700 font-extrabold mb-2">Overview:</h2>
+    <h2>Overview:</h2>
     <p className="text-indigo-700 font-bold pl-2">
       Egg Score: {restaurant.eggScore}
     </p>

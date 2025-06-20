@@ -1,11 +1,12 @@
-import { User } from "@/types/User";
-import { backendServiceUrl } from "./configUtils";
+import { User } from "../../types/User";
+import { backendServiceUrl, serverUrl } from "./configUtils";
 
 export async function getAllUsers(): Promise<User[]> {
   try {
-    const usersApiResponse = await fetch(`${backendServiceUrl}/users`);
+    const usersApiResponse = await fetch(`${serverUrl}/users`);
     if (!usersApiResponse.ok) {
-      throw new Error(usersApiResponse.statusText);
+      const errorMessage = await usersApiResponse.json();
+      throw new Error(errorMessage.message);
     }
     const userList = (await usersApiResponse.json()) as User[];
     return userList;
@@ -16,24 +17,20 @@ export async function getAllUsers(): Promise<User[]> {
 }
 
 export async function createUser(userToCreate: Partial<User>): Promise<User> {
-  try {
-    const userApiResponse = await fetch(`${backendServiceUrl}/users`, {
-      method: "POST",
-      body: JSON.stringify(userToCreate),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    if (!userApiResponse.ok) {
-      throw new Error(userApiResponse.statusText);
-    }
-
-    const user = (await userApiResponse.json()) as User;
-    return user;
-  } catch (e) {
-    console.log(e);
-    return null as unknown as User;
+  const userApiResponse = await fetch(`${backendServiceUrl}/users`, {
+    method: "POST",
+    body: JSON.stringify(userToCreate),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  if (!userApiResponse.ok) {
+    const errorMessage = await userApiResponse.json();
+    throw new Error(errorMessage.message);
   }
+
+  const user = (await userApiResponse.json()) as User;
+  return user;
 }
 
 export async function updateUser(userToUpdate: Partial<User>): Promise<User> {
@@ -49,7 +46,8 @@ export async function updateUser(userToUpdate: Partial<User>): Promise<User> {
       }
     );
     if (!userApiResponse.ok) {
-      throw new Error(userApiResponse.statusText);
+      const errorMessage = await userApiResponse.json();
+      throw new Error(errorMessage.message);
     }
 
     const user = (await userApiResponse.json()) as User;
@@ -68,7 +66,8 @@ export async function deleteUser(userName: string): Promise<User> {
       }
     );
     if (!userApiResponse.ok) {
-      throw new Error(userApiResponse.statusText);
+      const errorMessage = await userApiResponse.json();
+      throw new Error(errorMessage.message);
     }
 
     const user = (await userApiResponse.json()) as User;
@@ -96,7 +95,8 @@ export async function searchUsers(
   try {
     const userApiResponse = await fetch(apiUrl);
     if (!userApiResponse.ok) {
-      throw new Error(userApiResponse.statusText);
+      const errorMessage = await userApiResponse.json();
+      throw new Error(errorMessage.message);
     }
     const users = (await userApiResponse.json()) as User[];
     return users;
@@ -109,10 +109,11 @@ export async function searchUsers(
 export async function getUser(userName: string): Promise<User> {
   try {
     const userApiResponse = await fetch(
-      `${backendServiceUrl}/users/${userName}`
+      `${serverUrl}/users/search?username=${userName}`
     );
     if (!userApiResponse.ok) {
-      throw new Error(userApiResponse.statusText);
+      const errorMessage = await userApiResponse.json();
+      throw new Error(errorMessage.message);
     }
 
     const user = (await userApiResponse.json()) as User;

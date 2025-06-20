@@ -1,6 +1,6 @@
-import { Restaurant } from "@/types/Restaurant";
 import React from "react";
 import Link from "next/link";
+import { Restaurant } from "../../../types/Restaurant";
 
 type RestaurantListProps = {
   restaurants: Restaurant[];
@@ -9,11 +9,9 @@ type RestaurantListProps = {
 const RestaurantList: React.FC<RestaurantListProps> = ({ restaurants }) => (
   <>
     <header className="mb-10 text-center">
-      <h1 className="text-5xl font-extrabold text-indigo-700 mb-4">
-        Restaurants
-      </h1>
+      <h1 className="">Restaurants</h1>
     </header>
-    <ul id="restaurant-list">
+    <ul>
       {restaurants.map((restaurant) => (
         <li
           key={restaurant.id}

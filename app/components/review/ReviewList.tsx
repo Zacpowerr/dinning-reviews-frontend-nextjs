@@ -1,25 +1,46 @@
-import { Review } from "@/types/Review";
+"use client";
+
+import { MouseEvent, useEffect, useState } from "react";
+import { Review } from "../../../types/Review";
 import ReviewComponent from "./Review";
-import { getReviewsByRestaurantId } from "../lib/reviewUtils";
-import Link from "next/link";
 
-export default async function ReviewListComponent({ id }: { id: number }) {
-  const reviews = await getReviewsByRestaurantId(id);
+export default function ReviewListComponent({
+  reviews,
+}: {
+  reviews: Review[];
+}) {
+  const [isAdmin, setIsAdmin] = useState(false);
 
+  // Set isAdmin on client side only
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setIsAdmin(window.location.pathname.includes("admin"));
+    }
+  }, []);
+  const handleDelete = (e: MouseEvent) => {
+    e.preventDefault();
+    setIsAdmin(!isAdmin);
+  };
   return (
     <>
       <h2 className="text-indigo-700 font-extrabold mb-2">Reviews:</h2>
-      <Link href={`/restaurants/${id}/reviews/new`}>
-        <button
-          type="button"
-          className="w-full text-white font-bold bg-green-500 hover:bg-green-900 cursor-pointer p-2 rounded"
-        >
-          New Review
-        </button>
-      </Link>
-      <div className="flex flex-row no-wrap justify-start items-start shadow-lg border-2 rounded w-1/3 p-5 bg-gray-100">
+      <div className="flex flex-col justify-start items-start gap-y-5">
         {reviews.map((review: Review) => (
-          <ReviewComponent key={review.id} review={review} />
+          <div
+            className="w-full shadow-lg border-2 rounded p-5 bg-gray-100"
+            key={review.id}
+          >
+            {isAdmin && (
+              <button
+                type="button"
+                className="bg-red-500 shadow-md p-2 m-1 text-white rounded place-self-end"
+                onClick={handleDelete}
+              >
+                Delete
+              </button>
+            )}
+            <ReviewComponent key={review.id} review={review} />
+          </div>
         ))}
       </div>
     </>

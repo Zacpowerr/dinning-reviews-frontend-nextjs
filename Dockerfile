@@ -77,3 +77,12 @@ EXPOSE 3000
 
 # Run the application.
 CMD ["npm", "start"]
+
+################################################################################
+# Development stage for hot reloading
+FROM node:${NODE_VERSION}-alpine AS development
+WORKDIR /usr/src/app
+COPY package.json package-lock.json ./
+RUN npm ci
+EXPOSE 3000
+CMD ["npm", "run", "dev"]

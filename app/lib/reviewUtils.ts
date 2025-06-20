@@ -1,4 +1,4 @@
-import { Review } from "@/types/Review";
+import { Review } from "../../types/Review";
 import { backendServiceUrl, serverUrl } from "./configUtils";
 
 export async function getReviewsByRestaurantId(id: number): Promise<Review[]> {
@@ -7,7 +7,8 @@ export async function getReviewsByRestaurantId(id: number): Promise<Review[]> {
       `${serverUrl}/restaurants/${id}/reviews`
     );
     if (!reviewsApiResponse.ok) {
-      throw new Error(reviewsApiResponse.statusText);
+      const errorMessage = await reviewsApiResponse.json();
+      throw new Error(errorMessage.message);
     }
     const reviews = (await reviewsApiResponse.json()) as Review[];
     return reviews;
@@ -22,7 +23,8 @@ export async function getReviewsByUser(userName: string): Promise<Review[]> {
       `${serverUrl}/users/${userName}/reviews`
     );
     if (!reviewsApiResponse.ok) {
-      throw new Error(reviewsApiResponse.statusText);
+      const errorMessage = await reviewsApiResponse.json();
+      throw new Error(errorMessage.message);
     }
     const reviews = (await reviewsApiResponse.json()) as Review[];
     return reviews;
@@ -43,7 +45,8 @@ export async function createReview(
       },
     });
     if (!reviewApiResponse.ok) {
-      throw new Error(reviewApiResponse.statusText);
+      const errorMessage = await reviewApiResponse.json();
+      throw new Error(errorMessage.message);
     }
 
     const review = (await reviewApiResponse.json()) as Review;
@@ -69,7 +72,8 @@ export async function updateReview(
       }
     );
     if (!reviewApiResponse.ok) {
-      throw new Error(reviewApiResponse.statusText);
+      const errorMessage = await reviewApiResponse.json();
+      throw new Error(errorMessage.message);
     }
 
     const review = (await reviewApiResponse.json()) as Review;
@@ -89,7 +93,8 @@ export async function deleteReview(id: number): Promise<Review> {
       }
     );
     if (!reviewApiResponse.ok) {
-      throw new Error(reviewApiResponse.statusText);
+      const errorMessage = await reviewApiResponse.json();
+      throw new Error(errorMessage.message);
     }
 
     const review = (await reviewApiResponse.json()) as Review;
@@ -103,13 +108,28 @@ export async function getReviewById(id: number): Promise<Review> {
   try {
     const reviewApiResponse = await fetch(`${backendServiceUrl}/reviews/${id}`);
     if (!reviewApiResponse.ok) {
-      throw new Error(reviewApiResponse.statusText);
+      const errorMessage = await reviewApiResponse.json();
+      throw new Error(errorMessage.message);
     }
-
     const review = (await reviewApiResponse.json()) as Review;
     return review;
   } catch (e) {
     console.log(e);
     return null as unknown as Review;
+  }
+}
+
+export async function getPendingReviews(): Promise<Review[]> {
+  try {
+    const reviewApiResponse = await fetch(`${backendServiceUrl}/admin`);
+    if (!reviewApiResponse.ok) {
+      const errorMessage = await reviewApiResponse.json();
+      throw new Error(errorMessage.message);
+    }
+    const reviews = (await reviewApiResponse.json()) as Review[];
+    return reviews;
+  } catch (e) {
+    console.log(e);
+    return [];
   }
 }

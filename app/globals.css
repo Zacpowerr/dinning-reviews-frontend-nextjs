@@ -24,3 +24,23 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+.container {
+  @apply min-w-full min-h-[95.7lvh] bg-gradient-to-br from-blue-50 to-indigo-100 flex flex-col items-center justify-center;
+}
+
+.submit-btn {
+  @apply w-full text-white font-bold bg-green-500 hover:bg-green-900 cursor-pointer p-2 rounded;
+}
+
+h1 {
+  @apply text-5xl font-extrabold text-indigo-700 mb-4;
+}
+
+h2 {
+  @apply text-4xl text-indigo-700 font-extrabold mb-2;
+}
+
+.form {
+  @apply w-1/2 flex flex-col flex-nowrap gap-8 shadow-xl p-5 bg-gray-100 rounded;
+}
